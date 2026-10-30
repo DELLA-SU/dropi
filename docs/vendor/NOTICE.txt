@@ -1,0 +1,15 @@
+Dropi browser conversion — third-party notices
+
+All conversion dependencies are served by this site. No file-processing API is used.
+
+pdf-lib 1.17.1 — MIT — https://github.com/Hopding/pdf-lib
+pdfjs-dist 5.6.205 — Apache-2.0 — https://github.com/mozilla/pdf.js
+fflate 0.8.3 — MIT — https://github.com/101arrowz/fflate
+heic-to 1.6.7 — MIT — https://github.com/hoppergee/heic-to
+UTIF 3.1.0 — MIT — https://github.com/photopea/UTIF.js
+pako 1.0.11 — MIT AND Zlib — https://github.com/nodeca/pako
+
+heic-to includes libheif 1.23.7 and codec components. Its corresponding source and build instructions are available at https://github.com/hoppergee/heic-to and https://github.com/strukturag/libheif/tree/v1.23.7 .
+
+See the adjacent LICENSE-* files, and licenses in wasm/ and standard_fonts/.
+Exact vendored versions and npm distribution integrity are recorded in vendor-manifest.json in the website source.

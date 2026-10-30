@@ -1,0 +1,13 @@
+{
+  "name": "dropi-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser-local image and PDF converter",
+  "scripts": {
+    "test": "node tests/analytics.test.mjs && node tests/converter.test.mjs"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "sharp": "0.35.5"
+  }
+}

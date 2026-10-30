@@ -1,0 +1,140 @@
+/* Scope this layout to the converter hero; existing sections below stay unchanged. */
+.hero.toolbox-hero{display:flex;flex-direction:column;align-items:stretch;gap:0;max-width:1280px;padding-top:40px;padding-bottom:40px}
+.toolbox-hero .hero-copy{text-align:center}
+.toolbox-hero .hero-copy h1{font-size:64px;line-height:1.12;font-weight:750;letter-spacing:-3.5px;white-space:normal;margin:0 0 14px}
+.toolbox-hero .intro{font-size:18px;line-height:1.6;letter-spacing:-.35px;color:var(--sub);margin:0 0 24px}
+.toolbox-hero .toolbox-stage{padding:0;width:100%;display:block;min-width:0}
+.toolbox-hero .toolbox-stage:before{display:none}
+.toolbox-hero .toolbox-converter{width:100%;max-width:1080px;margin:auto;background:#fff;border:0;border-radius:0;box-shadow:none;transform:none;overflow:visible}
+.toolbox-hero .app-tabs{width:max-content;max-width:100%;margin:0 auto 32px;padding:5px;gap:5px;background:#edf0f5;border-radius:12px}
+.toolbox-hero .app-tabs button{flex:initial;min-width:150px;border-radius:9px;padding:12px 28px;font-size:16px;font-weight:600;color:var(--sub)}
+.toolbox-hero .app-tabs button[aria-selected=true]{background:#fff;color:#202a3a;box-shadow:0 2px 6px #253a5810}
+.toolbox-hero .tile-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.toolbox-hero .tile-grid button{position:relative;min-height:185px;height:auto;justify-content:flex-start;align-items:flex-start;gap:9px;padding:30px 30px 26px;text-align:left;border:1px solid #dfe6f0;border-radius:18px;color:#202a3a;background:#fff;box-shadow:0 2px 5px #283d5703;transition:background .14s,border-color .14s,transform .14s}
+.toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:34px;height:34px;margin-bottom:9px;color:#4b84eb}
+.toolbox-hero .tile-grid button>strong{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.toolbox-hero .tile-grid button>small{font-size:15px;line-height:1.5;color:#7c899d;word-break:keep-all}
+.toolbox-hero .tile-grid .tile-arrow{position:absolute;right:23px;top:23px;width:18px;height:18px;color:#a0adc0;transform:rotate(-45deg)}
+.toolbox-hero .tile-grid button:hover,.toolbox-hero .tile-grid button.drop-active{background:#edf4ff;border-color:#8db4f9;transform:translateY(-2px)}
+.toolbox-hero .tile-grid button.drop-active{box-shadow:0 0 0 3px #286be61c}
+.toolbox-hero .tile-grid button:disabled:hover{transform:none}
+.toolbox-hero .app-options{justify-content:center;min-height:0;margin-top:24px;font-size:13px;line-height:1.7;color:#7c899d;text-align:center}
+.toolbox-hero .app-options:has(#drop-label[hidden]){display:none}
+.toolbox-hero .compress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.toolbox-hero .compress-grid button{min-height:230px;justify-content:center;align-items:center;text-align:center;padding:26px}
+.toolbox-hero .compress-grid button>svg:not(.tile-arrow){width:38px;height:38px;margin-bottom:12px}
+.toolbox-hero .compression-settings{margin-top:25px;gap:17px;font-size:14px;color:var(--sub)}
+.toolbox-hero .compression-settings-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.toolbox-hero .compression-settings label{gap:8px}
+.toolbox-hero .compression-settings select,.toolbox-hero .compression-settings input[type=number]{font-size:14px;color:#202a3a;border:1px solid #dfe6f0;border-radius:8px;background:#fff;padding:7px 9px}
+.toolbox-hero .compression-settings input[type=number]{width:65px}
+.toolbox-hero .compression-settings input[type=checkbox]{width:16px;height:16px;margin:0;flex-shrink:0}
+.toolbox-hero .keep-resolution-control{color:#202a3a}
+.toolbox-hero .compression-help{width:max-content;font-size:13px;padding:2px 0}
+.toolbox-hero .compression-help-info{position:static;max-height:none;overflow:visible;border:0;box-shadow:none;background:#f5f7fa;border-radius:12px;padding:17px 20px;font-size:14px;color:#62728a;line-height:1.8}
+.toolbox-hero .compression-help-info dl{grid-template-columns:68px 1fr}
+.toolbox-hero .compression-help-info #pdf-web-note{background:transparent;padding:0;color:inherit;margin:12px 0}
+.toolbox-hero .web-note{font-size:13px;line-height:1.8;margin:12px 0 0}
+.toolbox-hero .app-status{font-size:12px;line-height:1.7;padding:13px 16px;margin-top:18px;border-radius:12px;background:#edf4ff;color:#3b6ba9}
+.toolbox-hero .app-status.is-error{background:#fff0ef;color:#a34034}
+.toolbox-hero .toolbox-support{display:flex;justify-content:center;gap:6px 22px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.toolbox-hero .web-local-note,.toolbox-hero .web-limits{font-size:11px;line-height:1.7;color:#8791a0;margin:0}
+.toolbox-hero .web-results{border-color:#e1e8f2;padding-top:16px;margin-top:16px}
+.toolbox-hero .results-heading{font-size:14px;color:#202a3a}
+.toolbox-hero .quiet-button{font-size:12px}
+.toolbox-hero .web-results li{font-size:13px;padding:12px 0}
+.toolbox-hero .web-results small{font-size:11px}
+.toolbox-hero .web-results a{padding:8px 12px}
+.toolbox-hero .web-results .button{font-size:13px;padding:12px}
+.toolbox-hero noscript{display:block;text-align:center;margin-top:18px;font-size:13px}
+@media(max-width:950px){.toolbox-hero .compression-settings-row{justify-content:flex-start;gap:16px 24px}}
+@media(max-width:700px){.hero.toolbox-hero{padding-top:30px;padding-bottom:28px}.toolbox-hero .hero-copy h1{font-size:52px;letter-spacing:-2.8px;margin:0 0 14px}.toolbox-hero .intro{font-size:16px;margin-bottom:25px}.toolbox-hero .tile-grid{gap:12px}.toolbox-hero .tile-grid button{padding:24px 20px;min-height:165px}.toolbox-hero .tile-grid button>strong{font-size:18px}.toolbox-hero .tile-grid button>small{font-size:13px}.toolbox-hero .compress-grid button{min-height:188px}}
+@media(max-width:560px){.toolbox-hero .hero-copy h1{font-size:40px;letter-spacing:-2.2px}.toolbox-hero .intro{font-size:12px}.toolbox-hero .app-tabs{margin-bottom:20px}.toolbox-hero .app-tabs button{min-width:110px;padding:9px 18px}.toolbox-hero .tile-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.toolbox-hero .tile-grid button{padding:21px 15px;min-height:150px;border-radius:15px}.toolbox-hero .tile-grid button>strong{font-size:14px}.toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:26px;height:26px}.toolbox-hero .tile-grid .tile-arrow{right:13px;top:14px;width:12px;height:12px}.toolbox-hero .compress-grid button{min-height:194px;padding:24px 13px}.toolbox-hero .compression-settings-row{gap:18px 22px}.toolbox-hero .keep-resolution-control{order:3;width:100%}.toolbox-hero .compression-settings .target-size-control{flex-wrap:wrap;gap:6px}.toolbox-hero .toolbox-support{flex-direction:column;gap:5px}.toolbox-hero .app-options{margin-top:18px}}
+@media(pointer:coarse){.toolbox-hero .app-tabs button,.toolbox-hero .compression-settings select,.toolbox-hero .compression-help{min-height:44px}.toolbox-hero .compression-settings input[type=number]{min-height:44px;font-size:16px}.toolbox-hero .web-results a,.toolbox-hero .quiet-button{min-height:44px;display:inline-flex;align-items:center;justify-content:center}}
+/* A larger headline and taller controls, close to the original header. */
+.hero.toolbox-hero{padding-top:4px;padding-bottom:28px}
+.toolbox-hero .hero-copy h1{font-size:58px;line-height:1.04;letter-spacing:-2.8px;word-spacing:.08em;margin:0 0 14px}
+.toolbox-hero .hero-copy h1>span:last-child{margin-inline-start:.06em}
+.toolbox-hero .intro{font-size:18px;line-height:1.5;margin:0 0 40px}
+.toolbox-hero .app-tabs{padding:4px;gap:4px;margin-bottom:26px}
+.toolbox-hero .app-tabs button{min-width:145px;min-height:44px;padding:12px 24px;font-size:17px;line-height:1.2}
+.toolbox-hero .tile-grid{gap:20px}
+.toolbox-hero .tile-grid button{min-height:170px;padding:24px;gap:18px}
+.toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:30px;height:30px;margin:0}
+.toolbox-hero .tile-grid button>strong{font-size:20px;line-height:1.2;margin:0}
+.toolbox-hero .tile-grid button>small{font-size:14px;line-height:1.5;margin:0}
+.toolbox-hero .tile-grid .tile-arrow{right:20px;top:20px;width:16px;height:16px}
+.toolbox-hero .compress-grid button{min-height:206px}
+.toolbox-hero .compress-grid button>svg:not(.tile-arrow){width:34px;height:34px}
+.toolbox-hero .app-options{font-size:12px;line-height:1.5;margin-top:18px}
+.toolbox-hero .toolbox-support{margin-top:14px}
+/* White space outside the blue band, plus more space inside it. */
+.principles.wrap{margin-top:72px;margin-bottom:72px;padding-top:48px;padding-bottom:48px}
+@media(min-width:701px) and (max-height:880px){
+ .hero.toolbox-hero{padding-top:4px;padding-bottom:24px}
+ .toolbox-hero .hero-copy h1{font-size:54px;margin-bottom:12px}
+ .toolbox-hero .intro{font-size:17px;margin-bottom:36px}
+ .toolbox-hero .app-tabs{margin-bottom:24px}
+ .toolbox-hero .tile-grid button{min-height:164px;padding:22px 24px}
+ .toolbox-hero .compress-grid button{min-height:196px}
+}
+@media(min-width:701px) and (max-height:780px){
+ .toolbox-hero .hero-copy h1{font-size:50px;margin-bottom:12px}
+ .toolbox-hero .intro{font-size:16px;margin-bottom:32px}
+ .toolbox-hero .app-tabs{margin-bottom:22px}
+ .toolbox-hero .app-tabs button{min-height:42px;padding:10px 24px;font-size:16px}
+ .toolbox-hero .tile-grid{gap:18px}
+ .toolbox-hero .tile-grid button{min-height:152px;padding:18px 24px;gap:16px}
+ .toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:28px;height:28px}
+ .toolbox-hero .app-options{margin-top:14px}
+ .toolbox-hero .toolbox-support{margin-top:12px}
+ .toolbox-hero .compress-grid button{min-height:184px}
+}
+@media(min-width:701px) and (max-height:720px){
+ .hero.toolbox-hero{padding-top:0;padding-bottom:20px}
+ .toolbox-hero .hero-copy h1{font-size:46px;margin-bottom:8px}
+ .toolbox-hero .intro{font-size:15px;margin-bottom:28px}
+ .toolbox-hero .app-tabs{margin-bottom:18px}
+ .toolbox-hero .app-tabs button{min-height:40px;padding:10px 24px;font-size:15px}
+ .toolbox-hero .tile-grid{gap:16px}
+ .toolbox-hero .tile-grid button{min-height:144px;padding:16px 24px;gap:14px}
+ .toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:26px;height:26px}
+ .toolbox-hero .tile-grid button>strong{font-size:18px}
+ .toolbox-hero .app-options{margin-top:12px}
+ .toolbox-hero .toolbox-support{margin-top:10px}
+ .toolbox-hero .compress-grid button{min-height:176px}
+}
+@media(min-width:701px) and (max-height:650px){
+ .hero.toolbox-hero{padding-bottom:16px}
+ .toolbox-hero .hero-copy h1{font-size:40px}
+ .toolbox-hero .intro{font-size:14px;margin-bottom:24px}
+ .toolbox-hero .app-tabs{margin-bottom:16px}
+ .toolbox-hero .app-tabs button{min-height:36px;padding:8px 24px;font-size:14px}
+ .toolbox-hero .tile-grid{gap:14px}
+ .toolbox-hero .tile-grid button{min-height:134px;padding:14px 24px;gap:12px}
+ .toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:24px;height:24px}
+ .toolbox-hero .tile-grid button>small{font-size:13px}
+ .toolbox-hero .compress-grid button{min-height:166px}
+}
+@media(max-width:800px){.toolbox-hero .tile-grid button{padding-left:20px;padding-right:20px}.toolbox-hero .tile-grid button>strong{font-size:18px}.toolbox-hero .tile-grid button>small{font-size:13px}}
+@media(max-width:700px){
+ .hero.toolbox-hero{padding-top:8px;padding-bottom:24px}
+ .toolbox-hero .hero-copy h1{font-size:48px;letter-spacing:-2.4px}
+ .toolbox-hero .intro{font-size:16px;margin-bottom:34px}
+ .toolbox-hero .tile-grid{gap:16px}
+ .toolbox-hero .tile-grid button{min-height:172px;padding:22px 18px;gap:16px}
+ .principles.wrap{margin-top:48px;margin-bottom:48px;padding-top:40px;padding-bottom:40px}
+}
+@media(max-width:560px){
+ .toolbox-hero .hero-copy h1{font-size:44px;letter-spacing:-2px}
+ .toolbox-hero .intro{font-size:15px}
+ .toolbox-hero .app-tabs button{min-width:120px;min-height:44px;padding:12px 18px;font-size:15px}
+ .toolbox-hero .tile-grid{gap:14px}
+ .toolbox-hero .tile-grid button{min-height:176px;padding:22px 16px}
+ .toolbox-hero .tile-grid button>strong{font-size:16px}
+ .toolbox-hero .tile-grid button>svg:not(.tile-arrow){width:28px;height:28px}
+ .toolbox-hero .tile-grid .tile-arrow{right:14px;top:14px;width:14px;height:14px}
+ .toolbox-hero .compress-grid button{min-height:202px}
+}
+
+footer.wrap .footer-links{display:flex;flex-wrap:wrap;gap:10px 16px;margin-left:auto;font-size:11px;color:#738092}footer.wrap .footer-links a:hover{color:#286be6;text-decoration:underline;text-underline-offset:3px}@media(max-width:700px){footer.wrap .footer-links{width:100%;margin-left:0;font-size:11px}}
