@@ -1,0 +1,11 @@
+.download-section{row-gap:32px}
+.download-section .affiliate{grid-column:1/-1;width:100%;scroll-margin-top:28px}
+.affiliate-card{padding:24px;border:1px solid #e6eaf1;border-radius:16px;background:#fafbfe}
+.affiliate-card h2{margin:0;font-size:13px;font-weight:650;line-height:1.6;letter-spacing:0;color:#53647a}
+.affiliate-disclosure{margin:8px 0 20px;font-size:13px;line-height:1.8;color:#53647a;word-break:keep-all;overflow-wrap:anywhere}
+.affiliate-banner{display:flex;justify-content:center;align-items:center;min-height:90px}
+.affiliate-banner a{display:block;max-width:100%;line-height:0;border-radius:4px;overflow:hidden}
+.affiliate-banner img{display:block;max-width:100%;height:auto;background:#fff;color:#53647a;font-size:13px;line-height:1.6}
+.affiliate-banner .affiliate-mobile{display:none}
+@media(max-width:820px){.affiliate-banner .affiliate-desktop{display:none}.affiliate-banner .affiliate-mobile{display:block}.affiliate-banner{min-height:100px}.affiliate-card{padding:20px}.affiliate-disclosure{margin-bottom:18px}}
+@media(max-width:560px){.affiliate-card{padding:20px 16px}.affiliate-card h2,.affiliate-disclosure{font-size:12px}}
