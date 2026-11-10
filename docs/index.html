@@ -25,7 +25,8 @@
 <link rel="icon" href="/dropi/dropi-icon.png?v=1.2.5" type="image/png"><link rel="apple-touch-icon" href="/dropi/dropi-icon.png?v=1.2.5"><link rel="stylesheet" href="/dropi/style.css?v=web-1"><link rel="stylesheet" href="/dropi/toolbox.css?v=13">
 <script type="module" src="/dropi/analytics.mjs?v=3"></script>
 <link rel="stylesheet" href="/dropi/affiliate.css?v=1">
-<script defer src="/dropi/app.js?v=web-3"></script>
+<link rel="stylesheet" href="/dropi/split.css?v=1">
+<script defer src="/dropi/app.js?v=split-1"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Dropi", "url": "https://della-su.github.io/dropi/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "ko", "description": "파일을 서버에 업로드하지 않고 브라우저에서 이미지·PDF를 변환하고 압축하는 무료 도구.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
 </head>
 <body>
@@ -58,7 +59,7 @@
 <button type="button" data-action="jpg" aria-label="JPG 변환" aria-describedby="jpg-hint" disabled><svg aria-hidden="true"><use href="#photo"/></svg><strong>JPG 변환</strong><small id="jpg-hint">HEIC · PNG → JPG</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
 <button type="button" data-action="png" aria-label="PNG 변환" aria-describedby="png-hint" disabled><svg aria-hidden="true"><use href="#scan"/></svg><strong>PNG 변환</strong><small id="png-hint">투명 배경 그대로</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
 <button type="button" data-action="merge" aria-label="PDF 합치기" aria-describedby="merge-hint" disabled><svg aria-hidden="true"><use href="#merge"/></svg><strong>PDF 합치기</strong><small id="merge-hint">여러 문서를 하나로</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
-<button type="button" data-action="split" aria-label="PDF 나누기" aria-describedby="split-hint" disabled><svg aria-hidden="true"><use href="#scissors"/></svg><strong>PDF 나누기</strong><small id="split-hint">페이지별로 따로 저장</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
+<button type="button" data-action="split" aria-label="PDF 나누기" aria-describedby="split-hint" disabled><svg aria-hidden="true"><use href="#scissors"/></svg><strong>PDF 나누기</strong><small id="split-hint">원하는 개수·페이지로 나누기</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
 <button type="button" data-action="extract" aria-label="PDF → 이미지" aria-describedby="extract-hint" disabled><svg aria-hidden="true"><use href="#stack"/></svg><strong>PDF → 이미지</strong><small id="extract-hint">각 페이지를 이미지로</small><svg class="tile-arrow" aria-hidden="true"><use href="#arrow"/></svg></button>
 </div>
 <div class="tile-grid compress-grid" role="tabpanel" id="compress-panel" aria-labelledby="compress-tab" data-panel="compress" hidden>
@@ -106,4 +107,13 @@
 <div><h2>파일 작업을<br>조금 더 가볍게.</h2><p>웹에서 가볍게 시작하고, 자주 쓴다면 Mac 앱으로.</p></div><div class="download-box"><h3>Dropi</h3><p>macOS 12 이상 · Apple Silicon 및 Intel</p><a class="button primary" href="/dropi/downloads/Dropi-1.2.5-macOS-Universal-Preview.dmg" download><svg><use href="#down"/></svg>테스트 버전 다운로드</a><a class="checksum" href="/dropi/downloads/Dropi-1.2.5-macOS-Universal-Preview.dmg.sha256" download>SHA-256 체크섬</a><div class="release-note" id="release-note"><strong>설치 전 확인해 주세요</strong><p>현재는 무료 테스트 버전으로, Apple 공증 전이라 Mac에서 실행이 제한될 수 있어요. <a href="#install-help">설치가 안 된다면?</a></p></div></div></section>
 </main>
 <footer class="wrap"><a class="logo" href="#"><span class="logo-icon"><img src="/dropi/dropi-icon.png?v=1.2.5" alt="" width="33" height="33"></span>Dropi</a><p>일상의 번거로움을 가볍게.</p><nav class="footer-links" aria-label="서비스 안내"><a href="/dropi/guide/">사용 가이드</a><a href="/dropi/about/">서비스 소개</a><a href="/dropi/privacy/">개인정보 안내</a><a href="mailto:ham2757@gmail.com">문의</a><a href="/dropi/vendor/NOTICE.txt">오픈소스</a></nav></footer>
-<dialog id="order-dialog" aria-labelledby="order-title"><h2 id="order-title">파일 순서 확인</h2><p>위에서부터 차례대로 PDF에 넣어요.</p><ol id="order-list"></ol><div class="dialog-actions"><button id="cancel-order">취소</button><button id="start-order" class="button primary">이 순서로 변환</button></div></dialog></body></html>
+<dialog id="order-dialog" aria-labelledby="order-title"><h2 id="order-title">파일 순서 확인</h2><p>위에서부터 차례대로 PDF에 넣어요.</p><ol id="order-list"></ol><div class="dialog-actions"><button id="cancel-order">취소</button><button id="start-order" class="button primary">이 순서로 변환</button></div></dialog>
+<dialog id="split-dialog" aria-labelledby="split-title" aria-describedby="split-description">
+<h2 id="split-title">PDF를 어떻게 나눌까요?</h2><p id="split-description">나눌 개수나 페이지 수를 정하고, 아래에서 결과를 확인하세요.</p>
+<div class="split-controls"><label>나누는 방식<select id="split-method"><option value="parts">파일 개수로 나누기</option><option value="pages">파일당 페이지 수로 나누기</option><option value="all">한 페이지씩 나누기</option></select></label>
+<label id="split-count-control">몇 개로 나눌까요?<span><input id="split-count" type="number" min="2" step="1" value="2" required>개</span></label>
+<label id="split-pages-control" hidden>파일 하나에 몇 페이지씩?<span><input id="split-pages" type="number" min="1" step="1" value="5" required>페이지</span></label></div>
+<div id="split-preview" class="split-preview" aria-live="polite"></div><p id="split-error" class="split-error" role="alert" hidden></p>
+<p class="split-note">원본은 그대로 두고 새 PDF를 만들어요. 완료 후 개별 파일 또는 ZIP으로 받을 수 있어요.</p>
+<div class="dialog-actions"><button id="cancel-split" type="button">취소</button><button id="start-split" type="button" class="button primary" disabled>PDF 나누기</button></div>
+</dialog></body></html>

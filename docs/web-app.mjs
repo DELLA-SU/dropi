@@ -1,4 +1,5 @@
-import { convertFiles, zipResults, validateFiles } from './converter.mjs';
+import { convertFiles, zipResults, validateFiles, inspectPDFs } from './converter.mjs?v=split-1';
+import { splitPlan, pageRangeLabel } from './pdf-split.mjs';
 const tool=document.getElementById('web-tool'), tabs=[...tool.querySelectorAll('[data-tab]')];
 const status=document.getElementById('web-status'), input=document.getElementById('file-input');
 const titles={pdf:'PDF 만들기',jpg:'JPG 변환',png:'PNG 변환',merge:'PDF 합치기',split:'PDF 나누기',extract:'PDF → 이미지','compress-image':'이미지 압축','compress-pdf':'PDF 압축'};
@@ -30,18 +31,19 @@ document.querySelectorAll('a[href="#compression-guide"]').forEach(a=>a.addEventL
 document.getElementById('cancel-work').addEventListener('click',()=>{controller?.abort();message('현재 파일 처리를 마친 뒤 취소해요…');});
 function renderResults(){
  const list=document.getElementById('result-list');list.replaceChildren();
- for(const r of results){const row=document.createElement('li'),label=document.createElement('span'),a=document.createElement('a');label.textContent=r.name;const small=document.createElement('small');small.textContent=`${fmt(r.blob.size)}${r.missed?' · 목표 초과':''}`;label.append(small);a.textContent='받기';a.download=r.name;a.href=URL.createObjectURL(r.blob);a.addEventListener('click',()=>track('result_download',{action:resultAction,download_kind:'single',output_count:1}));urls.push(a.href);row.append(label,a);list.append(row);}
+ for(const r of results){const row=document.createElement('li'),label=document.createElement('span'),a=document.createElement('a');label.textContent=r.name;const small=document.createElement('small');small.textContent=`${r.pages?r.pages+' · ':''}${fmt(r.blob.size)}${r.missed?' · 목표 초과':''}`;label.append(small);a.textContent='받기';a.download=r.name;a.href=URL.createObjectURL(r.blob);a.addEventListener('click',()=>track('result_download',{action:resultAction,download_kind:'single',output_count:1}));urls.push(a.href);row.append(label,a);list.append(row);}
  document.getElementById('web-results').hidden=false;document.getElementById('zip-results').hidden=results.length<2;
+ const heading=document.querySelector('.results-heading strong');heading.tabIndex=-1;heading.focus({preventScroll:true});document.getElementById('web-results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
 }
 document.getElementById('zip-results').addEventListener('click',async()=>{const b=document.getElementById('zip-results');b.disabled=true;b.textContent='ZIP 만드는 중…';try{const zip=await zipResults(results),url=URL.createObjectURL(zip);urls.push(url);const a=document.createElement('a');a.href=url;a.download='Dropi-results.zip';document.body.append(a);a.click();a.remove();track('result_download',{action:resultAction,download_kind:'zip',output_count:results.length});}catch{message('ZIP 파일을 만들지 못했어요. 개별 받기를 이용해 주세요.',true);}finally{b.disabled=false;b.textContent='모두 ZIP으로 받기';}});
 document.getElementById('clear-results').addEventListener('click',()=>{release();status.hidden=true;});
-async function run(files,action){
+async function run(files,action,actionOptions={}){
  if(busy)return;controller=new AbortController();
- let opts;try{validateFiles(files,action);opts=action.startsWith('compress')?options():{signal:controller.signal};}catch(e){release();message(e.message,true);return;}
+ let opts;try{validateFiles(files,action);opts=action.startsWith('compress')?options():{...actionOptions,signal:controller.signal};}catch(e){release();message(e.message,true);return;}
  release();closeHelp();lock(true);track('conversion_start',{action,file_count:files.length});message(`${titles[action]} 준비 중…`);const progress=document.getElementById('web-progress');progress.hidden=false;progress.value=0;
  try{results=await convertFiles(files,action,opts,(done,total,name)=>{progress.value=done/total;message(`${titles[action]} · ${name}`);});
   const before=files.reduce((n,f)=>n+f.size,0),after=results.reduce((n,r)=>n+r.blob.size,0),missed=results.filter(r=>r.missed).length;
-  let text=`완료 · ${results.length}개 파일`;
+  let text=`완료 · ${results.length}개 파일${action==='split'?' · 아래에서 개별 PDF 또는 ZIP으로 받아 주세요.':''}`;
   if(action.startsWith('compress'))text+=after<before?` · ${fmt(before)} → ${fmt(after)}`:' · 원본 크기로 저장';
   if(opts.targetBytes)text+=missed?` · 목표 초과 ${missed}개`:' · 목표 달성';
   resultAction=action;track('conversion_complete',{action,file_count:files.length,output_count:results.length});message(text);renderResults();
@@ -50,10 +52,42 @@ async function run(files,action){
 }
 const dialog=document.getElementById('order-dialog');
 function renderQueue(){const list=document.getElementById('order-list');list.replaceChildren();queue.forEach((f,i)=>{const row=document.createElement('li'),name=document.createElement('span');name.textContent=`${i+1}. ${f.name}`;row.append(name);for(const [delta,title] of [[-1,'위로'],[1,'아래로']]){const b=document.createElement('button');b.type='button';b.textContent=delta===-1?'↑':'↓';b.setAttribute('aria-label',`${f.name} ${title} 이동`);b.disabled=i+delta<0||i+delta>=queue.length;b.addEventListener('click',()=>{[queue[i],queue[i+delta]]=[queue[i+delta],queue[i]];renderQueue();});row.append(b);}list.append(row);});}
-function choose(files,action){if(busy||!files.length)return;try{validateFiles(files,action);}catch(e){release();message(e.message,true);return;}if(['pdf','merge'].includes(action)&&files.length>1){queue=[...files];queueMode=action;renderQueue();dialog.showModal();}else run(files,action);}
+function choose(files,action){if(busy||!files.length)return;try{validateFiles(files,action);}catch(e){release();message(e.message,true);return;}if(action==='split'){prepareSplit(files);}else if(['pdf','merge'].includes(action)&&files.length>1){queue=[...files];queueMode=action;renderQueue();dialog.showModal();}else run(files,action);}
 document.getElementById('cancel-order').addEventListener('click',()=>dialog.close());
  document.getElementById('start-order').addEventListener('click',()=>{const files=[...queue],action=queueMode;dialog.close();run(files,action);});
  dialog.addEventListener('close',()=>{queue=[];});
+const splitDialog=document.getElementById('split-dialog'), splitMethod=document.getElementById('split-method'), splitCount=document.getElementById('split-count'), splitPages=document.getElementById('split-pages'), splitPreview=document.getElementById('split-preview'), splitError=document.getElementById('split-error'), splitStart=document.getElementById('start-split');
+let splitFiles=[], splitInfo=[], splitController;
+function splitOptions(){return {splitMode:splitMethod.value,splitCount:Number(splitCount.value),splitPages:Number(splitPages.value)};}
+function updateSplitPreview(){
+ document.getElementById('split-count-control').hidden=splitMethod.value!=='parts';document.getElementById('split-pages-control').hidden=splitMethod.value!=='pages';
+ splitPreview.replaceChildren();splitError.hidden=true;splitStart.disabled=true;
+ if(!splitInfo.length)return;
+ try{
+  let total=0;const opts=splitOptions();
+  for(const info of splitInfo){
+   const ranges=splitPlan(info.pageCount,opts);total+=ranges.length;if(total>300)throw new Error('결과는 한 번에 300개까지 만들 수 있어요. 나눌 개수를 줄이거나 PDF를 하나씩 처리해 주세요.');
+   const section=document.createElement('section'),name=document.createElement('strong'),summary=document.createElement('p'),list=document.createElement('ol');
+   name.textContent=info.name;summary.textContent=`총 ${info.pageCount}페이지 → ${ranges.length}개 PDF`;
+   for(const [i,range] of ranges.entries()){const item=document.createElement('li');item.textContent=`${i+1}번 파일 · ${pageRangeLabel(range)}`;list.append(item);}
+   section.append(name,summary,list);splitPreview.append(section);
+  }
+  splitStart.textContent=`${total}개 PDF로 나누기`;splitStart.disabled=false;
+ }catch(e){splitPreview.replaceChildren();splitError.textContent=e.message;splitError.hidden=false;}
+}
+async function prepareSplit(files){
+ splitFiles=[...files];splitInfo=[];splitMethod.value='parts';splitCount.value='2';splitPages.value='5';splitStart.textContent='PDF 나누기';splitStart.disabled=true;splitError.hidden=true;splitPreview.textContent='PDF 페이지 수를 확인하고 있어요…';
+ splitController=new AbortController();[splitMethod,splitCount,splitPages].forEach(el=>el.disabled=true);lock(true);splitDialog.showModal();
+ try{
+  splitInfo=await inspectPDFs(files,{signal:splitController.signal});
+  const min=Math.min(...splitInfo.map(f=>f.pageCount));splitCount.max=String(min);splitPages.max=String(min-1);splitPages.value=String(Math.min(5,Math.max(1,min-1)));updateSplitPreview();
+ }catch(e){if(e.name!=='AbortError'){splitPreview.replaceChildren();splitError.textContent=e.message;splitError.hidden=false;}}
+ finally{[splitMethod,splitCount,splitPages].forEach(el=>el.disabled=false);lock(false);}
+}
+[splitMethod,splitCount,splitPages].forEach(el=>el.addEventListener('input',updateSplitPreview));
+document.getElementById('cancel-split').addEventListener('click',()=>splitDialog.close());
+splitDialog.addEventListener('close',()=>{splitController?.abort();splitFiles=[];splitInfo=[];});
+splitStart.addEventListener('click',()=>{updateSplitPreview();if(splitStart.disabled)return;const files=[...splitFiles],opts=splitOptions();splitDialog.close();run(files,'split',opts);});
 tool.querySelectorAll('[data-action]').forEach(button=>{
  button.addEventListener('click',()=>{if(busy)return;mode=button.dataset.action;input.accept=['merge','split','extract','compress-pdf'].includes(mode)?'.pdf,application/pdf':'.png,.jpg,.jpeg,.webp,.bmp,.avif,.heic,.heif,.tif,.tiff';input.value='';input.click();});
  button.addEventListener('dragover',e=>{e.preventDefault();if(!busy){e.dataTransfer.dropEffect='copy';button.classList.add('drop-active');}});

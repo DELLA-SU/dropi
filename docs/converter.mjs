@@ -1,5 +1,6 @@
 import { PDFDocument } from './vendor/pdf-lib.mjs';
 import { zipSync } from './vendor/fflate.mjs';
+import { splitPlan, pageRangeLabel } from './pdf-split.mjs';
 
 export const LIMITS = { file: 100 * 1024 * 1024, total: 200 * 1024 * 1024, pixels: 16_000_000, pages: 200, files: 100 };
 const levels = { quality: { q: .86, pixels: 4000 }, balanced: { q: .72, pixels: 2400 }, small: { q: .5, pixels: 1440 } };
@@ -103,6 +104,15 @@ async function loadPDF(file) {
     if (!d.getPageCount() || d.getPageCount() > LIMITS.pages) throw new Error('PDF는 1~200페이지까지 처리할 수 있어요.'); return d;
   } catch (e) { if (/encrypt|password/i.test(String(e))) throw new Error('암호로 잠긴 PDF는 웹에서 처리할 수 없어요. 잠금을 해제한 사본을 선택해 주세요.'); if (/200페이지/.test(e.message)) throw e; throw new Error(`${file.name}: PDF를 읽지 못했어요. 손상 여부를 확인해 주세요.`); }
 }
+export async function inspectPDFs(files, { signal } = {}) {
+  validateFiles(files, 'split');
+  const info = [];
+  for (const file of files) {
+    check(signal); const d = await loadPDF(file); check(signal);
+    info.push({ name: file.name, pageCount: d.getPageCount() }); await tick();
+  }
+  return info;
+}
 async function renderer(file) {
   const lib = await import('./vendor/pdf.mjs'); lib.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.min.mjs', import.meta.url).href;
   const task = lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false, cMapUrl: new URL('./vendor/cmaps/', import.meta.url).href, cMapPacked: true, standardFontDataUrl: new URL('./vendor/standard_fonts/', import.meta.url).href, wasmUrl: new URL('./vendor/wasm/', import.meta.url).href });
@@ -122,10 +132,10 @@ export async function convertFiles(files, mode, options = {}, progress = () => {
   validateFiles(files,mode); const {signal} = options; check(signal);
   const setting = levels[options.targetBytes ? 'balanced' : options.level || 'balanced']; const keep = options.keepResolution !== false;
   const results = [], used = new Set(); let outputBytes = 0;
-  function add(name, b, original) {
+  function add(name, b, original, pages) {
     if (outputBytes + b.size > LIMITS.total) throw new Error('웹 결과 용량 한도(200MB)를 넘어가요. 파일을 나눠 처리해 주세요.'); outputBytes += b.size;
     let unique = name, i=2; while(used.has(unique)) { const p=name.lastIndexOf('.'); unique=`${name.slice(0,p)} (${i++})${name.slice(p)}`; } used.add(unique);
-    results.push({name:unique,blob:b,inputSize:original?.size,missed:!!options.targetBytes && b.size>options.targetBytes});
+    results.push({name:unique,blob:b,inputSize:original?.size,missed:!!options.targetBytes && b.size>options.targetBytes,pages});
   }
   if (mode === 'pdf' || mode === 'merge') {
     const out = await PDFDocument.create();
@@ -145,8 +155,14 @@ export async function convertFiles(files, mode, options = {}, progress = () => {
       else { const transparent=alpha(c);ext=transparent?'png':'jpg';b=transparent?await blob(c):await targetJPEG(c,options.targetBytes,setting.q,signal);if(b.size>=file.size){b=file;ext=file.name.split('.').pop();} }
       add(`${name}${mode==='compress-image'?'_압축':''}.${ext}`,b,file);c.width=c.height=1;
     } else if(mode==='split') {
-      const d=await loadPDF(file); if(results.length+d.getPageCount()>300)throw new Error('출력은 한 번에 300개까지 만들 수 있어요.');
-      for(let i=0;i<d.getPageCount();i++){check(signal);const out=await PDFDocument.create();out.addPage((await out.copyPages(d,[i]))[0]);add(`${name}_${String(i+1).padStart(3,'0')}.pdf`,new Blob([await out.save()],{type:'application/pdf'}));await tick();}
+      const d=await loadPDF(file), ranges=splitPlan(d.getPageCount(),options); if(results.length+ranges.length>300)throw new Error('출력은 한 번에 300개까지 만들 수 있어요.');
+      for (const range of ranges) {
+        check(signal); progress(index,files.length,`${file.name} · ${pageRangeLabel(range)}`);
+        const out=await PDFDocument.create(), indices=Array.from({length:range.end-range.start+1},(_,i)=>range.start-1+i);
+        (await out.copyPages(d,indices)).forEach(p=>out.addPage(p));
+        const suffix=String(range.start).padStart(3,'0')+(range.start===range.end?'':`-${String(range.end).padStart(3,'0')}`);
+        add(`${name}_${suffix}.pdf`,new Blob([await out.save()],{type:'application/pdf'}),undefined,pageRangeLabel(range)); await tick();
+      }
     } else if(mode==='extract'||mode==='compress-pdf') {
       if(mode==='compress-pdf'&&keep){const d=await loadPDF(file);const b=new Blob([await d.save({useObjectStreams:true})],{type:'application/pdf'});add(`${name}_압축.pdf`,b.size<file.size?b:file,file);continue;}
       const pdf=await renderer(file);
