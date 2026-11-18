@@ -28,6 +28,8 @@
 <link rel="stylesheet" href="/dropi/split.css?v=1">
 <script defer src="/dropi/app.js?v=split-1"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Dropi", "url": "https://della-su.github.io/dropi/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "ko", "description": "파일을 서버에 업로드하지 않고 브라우저에서 이미지·PDF를 변환하고 압축하는 무료 도구.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+<link rel="stylesheet" href="/dropi/how-demo.css?v=1">
+<script defer src="/dropi/how-demo.js?v=1"></script>
 </head>
 <body>
 <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -81,7 +83,28 @@
 
 <div class="principles wrap"><span><svg><use href="#shield"/></svg>업로드 없이, 내 기기에서</span><span><svg><use href="#stack"/></svg>여러 파일도 한 번에</span><span><svg><use href="#doc"/></svg>원본은 그대로 보존</span></div>
 <section class="capabilities wrap" id="features"><div class="section-heading"><h2>매번 찾던 도구들,<br>이제 한곳에.</h2></div><div class="tools-list"><article><h3>필요한 형식으로 바꾸기</h3><p>아이폰 HEIC 사진도 JPG로 바꾸고, 이미지를 PDF로 묶고.<br>PDF 합치기·나누기·이미지 저장도 한곳에서.</p><div class="format-line"><span>PNG</span><span aria-hidden="true">↔</span><span>JPG</span><span aria-hidden="true">→</span><span>PDF</span></div></article><article><h3>큰 파일을 가볍게 만들기</h3><p>사진과 PDF의 용량을 줄여 저장해요.<br>원본 해상도 유지와 목표 용량을 선택하세요.</p><div class="size-example"><span>8.2MB</span><svg><use href="#arrow"/></svg><strong>2.1MB</strong><small>화면 예시 · 실제 압축률은 파일마다 달라요</small></div></article></div></section>
-<section class="how-section" id="how"><div class="wrap"><h2>웹으로도, 앱으로도.</h2><div class="steps"><article><span>1</span><h3>웹에서 바로 변환</h3><p>위 변환기의 원하는 칸에 파일을 드롭하거나 클릭해서 선택해요.</p></article><article><span>2</span><h3>결과 다운로드</h3><p>작업이 끝나면 결과를 받아요. 여러 파일은 ZIP으로 한 번에 저장할 수 있어요.</p></article><article><span>3</span><h3>자주 쓴다면 Mac 앱</h3><p>DMG를 열고 Dropi를 Applications 폴더로 옮겨요. 앱에서도 같은 방식으로 사용해요.</p></article></div></div></section>
+<section class="how-section" id="how" aria-labelledby="how-title"><div class="wrap how-layout">
+<div class="how-copy"><h2 id="how-title">웹으로도, 앱으로도.</h2><div class="steps" role="list">
+<article role="listitem"><span aria-hidden="true">1</span><h3>웹에서 바로 변환</h3><p>위 변환기의 원하는 칸에 파일을 드롭하거나 클릭해서 선택해요.</p></article>
+<article role="listitem"><span aria-hidden="true">2</span><h3>결과 다운로드</h3><p>작업이 끝나면 결과를 받아요. 여러 파일은 ZIP으로 한 번에 저장할 수 있어요.</p></article>
+<article role="listitem"><span aria-hidden="true">3</span><h3>자주 쓴다면 Mac 앱</h3><p>DMG를 열고 Dropi를 Applications 폴더로 옮겨요. 앱에서도 같은 방식으로 사용해요.</p></article>
+</div></div>
+<figure class="how-demo-stage" data-how-demo aria-label="파일을 앱에 드롭해 PDF로 바꾸는 사용 예시">
+<div class="how-demo-app" aria-hidden="true"><div class="how-demo-chrome"><span class="how-demo-traffic"><i></i><i></i><i></i></span><strong>Dropi</strong><span>파일 변환 도구</span></div><div class="how-demo-content">
+<div class="how-demo-tabs"><span>변환</span><span>용량 압축</span></div>
+<div class="how-demo-grid">
+<div class="how-demo-tile how-demo-target"><svg><use href="#doc"/></svg><span>PDF 만들기</span></div>
+<div class="how-demo-tile"><svg><use href="#photo"/></svg><span>JPG 변환</span></div>
+<div class="how-demo-tile"><svg><use href="#scan"/></svg><span>PNG 변환</span></div>
+<div class="how-demo-tile"><svg><use href="#merge"/></svg><span>PDF 합치기</span></div>
+<div class="how-demo-tile"><svg><use href="#scissors"/></svg><span>PDF 나누기</span></div>
+<div class="how-demo-tile"><svg><use href="#stack"/></svg><span>PDF → 이미지</span></div>
+</div><div class="how-demo-save"><svg><use href="#folder"/></svg><span>저장 경로</span></div></div></div>
+<div class="how-demo-file how-demo-file--input" aria-hidden="true"><svg><use href="#photo"/></svg><span>photo.png</span></div>
+<div class="how-demo-file how-demo-file--result" aria-hidden="true"><svg><use href="#doc"/></svg><span>document.pdf</span><span class="how-demo-check">✓</span></div>
+<div class="how-demo-cursor" aria-hidden="true"><svg viewBox="0 0 28 34"><path d="M3 2v26l7-7 5 11 5-3-5-10h10Z"/></svg></div>
+<figcaption class="how-demo-controls"><span>앱 사용 예시</span><button class="how-demo-toggle" type="button" aria-label="파일 드롭 시연 일시정지">일시정지</button></figcaption>
+</figure></div></section>
 
 <section class="faq wrap" id="questions"><div><h2>시작 전에<br>궁금한 것들.</h2></div><div class="faq-items"><details id="install-help"><summary>설치가 안 된다면?</summary><div class="install-guide">
 <p>DMG 파일을 열고 Dropi를 Applications(응용 프로그램) 폴더로 끌어 넣은 뒤 실행하세요. 현재 다운로드는 Apple 공증 전 테스트 버전이라 개발자를 확인할 수 없다는 보안 경고가 표시될 수 있어요. 이 페이지에서 받은 Dropi가 맞는지 확인한 뒤 아래 방법 중 하나를 따라 주세요.</p>
